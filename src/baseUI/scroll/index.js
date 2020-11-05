@@ -1,4 +1,4 @@
-import React, { forwardRef, useState,useEffect, useRef, useImperativeHandle, useMemo } from "react"
+import React, { forwardRef, useState, useEffect, useRef, useImperativeHandle, useMemo } from "react"
 import PropTypes from "prop-types"
 import BScroll from "better-scroll"
 import styled from 'styled-components';
@@ -36,14 +36,14 @@ const Scroll = forwardRef((props, ref) => {
 
   const scrollContaninerRef = useRef();
 
-  const { direction, click, refresh,  bounceTop, bounceBottom } = props;
+  const { direction, click, refresh, bounceTop, bounceBottom } = props;
 
   const { pullUp, pullDown, onScroll, pullUpLoading, pullDownLoading } = props;
 
   let pullUpDebounce = useMemo(() => {
     return debounce(pullUp, 300)
   }, [pullUp]);
-  
+
   let pullDownDebounce = useMemo(() => {
     return debounce(pullDown, 300)
   }, [pullDown]);
@@ -54,7 +54,7 @@ const Scroll = forwardRef((props, ref) => {
       scrollY: direction === "vertical",
       probeType: 3,
       click: click,
-      bounce:{
+      bounce: {
         top: bounceTop,
         bottom: bounceBottom
       }
@@ -66,9 +66,11 @@ const Scroll = forwardRef((props, ref) => {
     // eslint-disable-next-line
   }, []);
 
+  // *给实例绑定 scroll 事件，
   useEffect(() => {
-    if(!bScroll || !onScroll) return;
+    if (!bScroll || !onScroll) return;
     bScroll.on('scroll', (scroll) => {
+      //scroll为滚动到屏幕的位置
       onScroll(scroll);
     })
     return () => {
@@ -77,10 +79,10 @@ const Scroll = forwardRef((props, ref) => {
   }, [onScroll, bScroll]);
 
   useEffect(() => {
-    if(!bScroll || !pullUp) return;
+    if (!bScroll || !pullUp) return;
     bScroll.on('scrollEnd', () => {
       //判断是否滑动到了底部
-      if(bScroll.y <= bScroll.maxScrollY + 100){
+      if (bScroll.y <= bScroll.maxScrollY + 100) {
         pullUpDebounce();
       }
     });
@@ -90,10 +92,10 @@ const Scroll = forwardRef((props, ref) => {
   }, [pullUpDebounce, pullUp, bScroll]);
 
   useEffect(() => {
-    if(!bScroll || !pullDown) return;
+    if (!bScroll || !pullDown) return;
     bScroll.on('touchEnd', (pos) => {
       //判断用户的下拉动作
-      if(pos.y > 50) {
+      if (pos.y > 50) {
         pullDownDebounce();
       }
     });
@@ -102,22 +104,22 @@ const Scroll = forwardRef((props, ref) => {
     }
   }, [pullDownDebounce, pullDown, bScroll]);
 
-
+  // *每次重新渲染都要刷新实例，防止无法滑动:
   useEffect(() => {
-    if(refresh && bScroll){
+    if (refresh && bScroll) {
       bScroll.refresh();
     }
   });
 
   useImperativeHandle(ref, () => ({
     refresh() {
-      if(bScroll) {
+      if (bScroll) {
         bScroll.refresh();
         bScroll.scrollTo(0, 0);
       }
     },
     getBScroll() {
-      if(bScroll) {
+      if (bScroll) {
         return bScroll;
       }
     }
@@ -129,9 +131,9 @@ const Scroll = forwardRef((props, ref) => {
     <ScrollContainer ref={scrollContaninerRef}>
       {props.children}
       {/* 滑到底部加载动画 */}
-      <PullUpLoading style={ PullUpdisplayStyle }><Loading></Loading></PullUpLoading>
+      <PullUpLoading style={PullUpdisplayStyle}><Loading></Loading></PullUpLoading>
       {/* 顶部下拉刷新动画 */}
-      <PullDownLoading style={ PullDowndisplayStyle }><LoadingV2></LoadingV2></PullDownLoading>
+      <PullDownLoading style={PullDowndisplayStyle}><LoadingV2></LoadingV2></PullDownLoading>
     </ScrollContainer>
   );
 })
@@ -140,7 +142,7 @@ Scroll.defaultProps = {
   direction: "vertical",
   click: true,
   refresh: true,
-  onScroll:null,
+  onScroll: null,
   pullUpLoading: false,
   pullDownLoading: false,
   pullUp: null,
