@@ -7,6 +7,8 @@ import RecommendList from '../../components/list/';
 import Scroll from '../../baseUI/scroll/index';
 import Loading from '../../baseUI/loading/index';
 import { Content } from './style';
+import { renderRoutes } from 'react-router-config';
+
 
 function Recommend(props) {
   const { bannerList, recommendList, enterLoading } = props;
@@ -37,6 +39,7 @@ function Recommend(props) {
           <RecommendList recommendList={recommendListJS}></RecommendList>
         </div>
       </Scroll>
+      { renderRoutes(props.route.routes)}
     </Content>
   );
 }
