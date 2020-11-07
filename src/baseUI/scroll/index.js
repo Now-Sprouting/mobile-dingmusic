@@ -69,6 +69,7 @@ const Scroll = forwardRef((props, ref) => {
   // *给实例绑定 scroll 事件，
   useEffect(() => {
     if (!bScroll || !onScroll) return;
+    console.log(onScroll);
     bScroll.on('scroll', (scroll) => {
       //scroll为滚动到屏幕的位置
       onScroll(scroll);

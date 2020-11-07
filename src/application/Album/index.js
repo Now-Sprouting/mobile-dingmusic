@@ -9,7 +9,6 @@ import { getAlbumList, changeEnterLoading } from './store/actionCreators';
 import Loading from '../../baseUI/loading/index';
 
 function Album(props) {
-  console.log(props);
   const [showStatus, setShowStatus] = useState(true);
   const [title, setTitle] = useState("歌单");
 
