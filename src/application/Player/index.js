@@ -9,6 +9,7 @@ import {
   changePlayMode,
   changeFullScreen
 } from "./store/actionCreators";
+import PlayList from './play-list'
 import MiniPlayer from './miniPlayer';
 import NormalPlayer from './normalPlayer';
 import { getSongUrl, isEmptyObject, shuffle, findIndex } from "../../api/utils";
@@ -46,7 +47,8 @@ function Player(props) {
     changeCurrentDispatch,
     changePlayListDispatch,//改变playList
     changeModeDispatch,//改变mode
-    toggleFullScreenDispatch
+    toggleFullScreenDispatch,
+    togglePlayListDispatch
   } = props;
   
   const playList = immutablePlayList.toJS();
@@ -76,7 +78,7 @@ function Player(props) {
     togglePlayingDispatch(true);//播放状态
     setCurrentTime(0);//从头开始播放
     setDuration((current.dt / 1000) | 0);//时长
-  }, [playList, currentIndex]);
+  }, [playList, currentIndex, changeCurrentDispatch, togglePlayingDispatch, songReady, preSong.id]);
 
   useEffect(() => {
     playing ? audioRef.current.play() : audioRef.current.pause();
@@ -171,6 +173,7 @@ function Player(props) {
           toggleFullScreen={toggleFullScreenDispatch}
           clickPlaying={clickPlaying}
           percent={percent}
+          togglePlayList={togglePlayListDispatch}
         /> 
         )
       }
@@ -189,9 +192,11 @@ function Player(props) {
           onProgressChange={onProgressChange}
           handlePrev={handlePrev}
           handleNext={handleNext}
+          togglePlayList={togglePlayListDispatch}
         />
         )
       }
+      <PlayList></PlayList>
       <audio
         ref={audioRef}
         onTimeUpdate={updateTime}

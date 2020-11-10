@@ -4,15 +4,14 @@ import style from '../../assets/global-style';
 export const SongList = styled.div`
   border-radius: 10px;
   opacity: 0.98;
-  ${props => props.showBackground ? `background: ${style["highlight-background-color"]}` : ""}
-  .first_line{
+  .first_line {
     box-sizing: border-box;
     padding: 10px 0;
     margin-left: 10px;
     position: relative;
     justify-content: space-between;
     border-bottom: 1px solid ${style["border-color"]};
-    .play_all{
+    .play_all {
       display: inline-block;
       line-height: 24px;
       color: ${style["font-color-desc"]};
