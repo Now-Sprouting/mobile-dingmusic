@@ -1,13 +1,20 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Redirect } from "react-router-dom";
 import Home from '../application/Home';
-import Recommend from '../application/Recommend';
-import Singers from '../application/Singers';
-import Rank from '../application/Rank';
-import Album from '../application/Album';
-import Singer from '../application/Singer';
+const RecommendComponent = React.lazy(() => import("../application/Recommend/"));
+const SingersComponent = React.lazy(() => import("../application/Singers/"));
+const RankComponent = React.lazy(() => import("../application/Rank/"));
+const AlbumComponent = React.lazy(() => import("../application/Album/"));
+const SingerComponent = React.lazy(() => import("./../application/Singer/"));
 
-const routes = [
+const SuspenseComponent = Component => props => {
+  return (
+    <Suspense fallback={null}>
+      <Component {...props}></Component>
+    </Suspense>
+  )
+}
+const router = [
   {
     path: "/",
     component: Home,
@@ -20,38 +27,44 @@ const routes = [
         )
       },
       {
-        path: "/recommend",
-        component: Recommend,
+        path: "/recommend/",
+        component: SuspenseComponent(RecommendComponent),
         routes: [
           {
             path: "/recommend/:id",
-            component: Album
+            component: SuspenseComponent(AlbumComponent)
           }
         ]
       },
       {
         path: "/singers",
-        component: Singers,
-        key: "singers",
+        component: SuspenseComponent(SingersComponent),
         routes: [
           {
-            path: "/singers/:id",
-            component: Singer
+            path: '/singers/:id',
+            component: SuspenseComponent(SingerComponent)
           }
         ]
       },
       {
-        path: "/rank",
-        component: Rank,
+        path: "/rank/",
+        component: SuspenseComponent(RankComponent),
+        key: "rank",
         routes: [
           {
             path: "/rank/:id",
-            component: Album
+            component: SuspenseComponent(AlbumComponent)
           }
         ]
+      },
+      {
+        path: "/album/:id",
+        exact: true,
+        key: "album",
+        component: SuspenseComponent(AlbumComponent)
       }
     ]
   }
 ]
 
-export default routes
+export default router
